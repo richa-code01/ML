@@ -84,7 +84,7 @@ Predicts categorical outputs.
 
 Unsupervised Learning works on unlabelled data.
 
-The model does not predict outputs but instead finds hidden patterns in data.
+The model does not predict outputs but instead finds hidden patterns in data and divide them in groups.
 
 ---
 
@@ -126,7 +126,7 @@ Learning through:
 - Penalties
 
 Uses an agent-based approach.
-No input data is given just scenarios and then based on its action it is rewarded or penalty and agent learns through that as it tries to maximize reward and minimize penalty.
+No input data is given just scenarios and then based on its action it is rewarded or penalized and agent learns through that as it tries to maximize reward and minimize penalty.
 
 ---
 
@@ -140,7 +140,7 @@ No input data is given just scenarios and then based on its action it is rewarde
 
 # ML Training Methods
 
-# Batch Learning
+# Batch Learning also called offline training
 
 ## Definition
 
@@ -162,7 +162,7 @@ Model is trained on the complete dataset at once, ususally done offline
 
 ---
 
-# Online Learning
+# Online training
 
 ## Definition
 
@@ -196,13 +196,13 @@ YouTube recommendation systems.
 - Can learn from noisy or incorrect data
 
 ---
-
+## ML learning types
 # Instance-Based Learning
 
 ## Definition
 
-The model memorizes training data and compares new data with stored examples.
-
+The model memorizes training data and compares new data with stored examples.here model doesn't learn anything, it just stores the input data.
+Diadvantage: we need the entire input data all the time, requires high storage.
 ---
 
 ## Example
@@ -217,6 +217,7 @@ K-Nearest Neighbors (KNN)
 
 The model learns patterns and generalizes from data.
 
-Instead of memorizing, it builds a mathematical representation.
+Instead of memorizing, it builds a mathematical representation. here we can store the model and input data is not required afterwards.
+example: linear regression,etc.
 
 ---
