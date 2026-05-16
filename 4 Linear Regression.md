@@ -223,7 +223,9 @@ Model too simple to learn patterns.
 ---
 ### Best Case: low bias and low variance
   -Bias is simplicity of model. High bias means model is too simple not learning even basic patterns in data.
-  -Variance is sensitivity to training data. High bias means model is memorizing training data, fails on new data.
+  
+  -Variance is sensitivity to training data. High variance means model is memorizing training data, fails on new data.
+  
   -Linear Regression has higher bias as we try to find a best fit straight line for simple linear regression and hyper plane(i.e plane surface)     for multiple linear regression.
 
 ### Ridge Regression (L2)
