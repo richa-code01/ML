@@ -15,9 +15,9 @@
         ↓
 6. Train Model
         ↓
-7. Deploy Model
+7. Test Model and optimize
         ↓
-8. Test & Optimize
+8. Deploy Model
 ```
 
 ---
@@ -58,13 +58,13 @@ Prepare data for ML model.
 
 ## 4. Perform EDA
 
-Analyze patterns and relationships in data.
+Analyze patterns and relationships in data. trying to find hidden patterns ar associations in data.
 
 ---
 
 ## 5. Feature Engineering
 
-Create useful features for better learning.
+Create useful features for better learning or drop some features if it is not contributing anything in the output.
 
 ---
 
@@ -130,13 +130,13 @@ Measures relationship between features and target variable.
 
 ---
 
-## Pearson Correlation
+## Pearson Correlation(used for numerical data)
 
-Measures linear relationship between variables.
+Measures linear relationship between variables. here we can drop features having very low correlation with output variable.
 
 ---
 
-## Chi-Square Test
+## Chi-Square Test(used for categorical data)
 
 Used for categorical feature selection.
 
@@ -206,13 +206,14 @@ Data cleaning improves dataset quality.
 
 # Encoding Categorical Data
 
-Machine learning models work with numerical data, so categorical values must be converted into numbers.
+Machine learning models work only with numerical data, so categorical values must be converted into numbers.
 
 ---
 
 ## Label Encoding
 
 Assigns unique numbers to categories.
+drawback: in distance based models high numeric value of a category can affect the output, thus we use this only when we have 2-3 categories for a particular feature.
 
 ### Example
 
@@ -226,7 +227,7 @@ Green → 2
 
 ## One-Hot Encoding
 
-Creates separate binary columns for categories.
+Creates separate binary columns for categories. It is widely used when multiple categories are there for a single feature.
 
 | Color | Red | Blue | Green |
 |---|---|---|---|
@@ -240,32 +241,34 @@ Feature scaling brings variables to the same scale.
 
 ---
 
-## Min-Max Scaling
+## Min-Max Scaling also called normalization.
 
 Transforms values between 0 and 1.
 
 ### Formula
 
-$begin:math:display$
-x\' \= \\frac\{x \- x\_\{min\}\}\{x\_\{max\} \- x\_\{min\}\}
-$end:math:display$
+
+
+x′ = (x − xₘᵢₙ) / (xₘₐₓ − xₘᵢₙ)
 
 ---
 
 ## Standardization (Z-Score Scaling)
 
-Transforms data such that:
+Transforms data such that
+
 - Mean = 0
+
 - Standard deviation = 1
+- ex:  transform values between -3 and 3
 
 ### Formula
 
-$begin:math:display$
-z \= \\frac\{x \- \\mu\}\{\\sigma\}
-$end:math:display$
+z = (x − μ) / σ
+
 
 Where:
-- $begin:math:text$\\mu$end:math:text$ = Mean
-- $begin:math:text$\\sigma$end:math:text$ = Standard deviation
+- μ is mean of the data.
+- σ is standard deviation of the data.
 
 ---
