@@ -44,7 +44,7 @@ A tensor is an N-dimensional array used to store numerical data.
 
 # Axis / Rank
 
-- Number of dimensions in a tensor
+- Number of dimensions in a tensor is called Axis
 - Also called Rank
 
 ---
@@ -55,6 +55,14 @@ A tensor is an N-dimensional array used to store numerical data.
 [1, 2, 3, 4]
 ```
 
-Rank = 1
+Rank/Axis = 1
 
 ---
+# No. of dimensions of a vector = no. of elements in it.
+
+#Example
+
+```text
+[1, 2, 3, 4]
+```
+Dimension of this vector = 4 (data represented in 4 coordinates)
