@@ -14,8 +14,8 @@ $$
 y = mx + b
 $$
 
-- `m` → slope (it measures for a unit change in x axis, how much change is done in y axis)
-- `b` → intercept (from where does the line starts in y axis)
+- `m` → slope (for a unit change in x-axis, how much change happens in y-axis)
+- `b` → intercept (from where the line starts on y-axis)
 
 ---
 
@@ -42,7 +42,7 @@ Difference between:
 - actual value
 - predicted value
 
-Best-fit line → minimum residual error.(value of weights and bias such that the error is minimum)
+Best-fit line → minimum residual error (values of weights and bias such that error is minimum)
 
 ```text
 Actual Point *
@@ -85,7 +85,7 @@ $$
 $$
 
 - `α` → learning rate
-- Small `α` → slow but stable
+- Small `α` → slow but stable learning
 - Large `α` → may overshoot minima
 
 #### Cost Curve
@@ -200,7 +200,7 @@ Data:  *  *   * *  *
 Curve: ~~~~~ highly complex ~~~~~
 ```
 
-Model memorizes training data.
+Model memorizes training data instead of learning patterns.
 
 ---
 
@@ -218,15 +218,23 @@ Data: *  *   * *  *
 Line: -------------------
 ```
 
-Model too simple to learn patterns.
+Model is too simple to capture patterns.
 
 ---
-### Best Case: low bias and low variance
-  -Bias is simplicity of model. High bias means model is too simple not learning even basic patterns in data.
-  
-  -Variance is sensitivity to training data. High variance means model is memorizing training data, fails on new data.
-  
-  -Linear Regression has higher bias as we try to find a best fit straight line for simple linear regression and hyper plane(i.e plane surface)     for multiple linear regression.
+
+### Best Case: Low Bias + Low Variance
+
+- Bias → simplicity of model  
+  High bias means model is too simple and cannot learn basic patterns.
+
+- Variance → sensitivity to training data  
+  High variance means model memorizes training data and fails on new data.
+
+- Linear Regression has higher bias because we try to fit:
+  - straight line in simple linear regression
+  - hyperplane in multiple linear regression
+
+---
 
 ### Ridge Regression (L2)
 
