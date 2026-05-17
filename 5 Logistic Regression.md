@@ -197,8 +197,6 @@ Loss ≈ very high
 
 So the model learns to predict probabilities correctly.
 
----
-
 ### Applications
 
 - Spam Detection
@@ -206,3 +204,134 @@ So the model learns to predict probabilities correctly.
 - Fraud Detection
 - Customer Churn Prediction
 - Obesity Prediction
+
+### Evaluation Metrics
+
+Used to evaluate classification models.
+
+---
+
+### Confusion Matrix
+
+![Confusion Matrix](https://media.geeksforgeeks.org/wp-content/uploads/20221031145731/ConfusionMatrix2.png)
+
+---
+
+### Terms
+
+- **TP (True Positive)** → predicted positive, actually positive
+- **TN (True Negative)** → predicted negative, actually negative
+- **FP (False Positive)** → predicted positive, actually negative  
+  - Type 1 Error
+- **FN (False Negative)** → predicted negative, actually positive  
+  - Type 2 Error
+
+---
+
+### 1. Accuracy
+
+Percentage of correct predictions.
+
+$$
+Accuracy=\frac{TP+TN}{TP+TN+FP+FN}
+$$
+
+#### Use Cases
+
+Used when:
+- dataset is balanced
+- FP and FN have similar importance
+
+#### Examples
+
+- Student pass/fail prediction
+- Basic image classification
+
+---
+
+### 2. Precision
+
+Out of all predicted positives,
+how many were actually positive?
+
+$$
+Precision=\frac{TP}{TP+FP}
+$$
+
+High precision → low false positives.
+
+#### Use Cases
+
+Used when **False Positives are costly**.
+
+#### Examples
+
+- Spam Detection
+- Fraud Detection
+- Important email classification
+
+```text
+Normal mail marked as spam = bad
+```
+
+---
+
+### 3. Recall (Sensitivity)
+
+Out of all actual positives,
+how many were correctly identified?
+
+$$
+Recall=\frac{TP}{TP+FN}
+$$
+
+High recall → low false negatives.
+
+#### Use Cases
+
+Used when **False Negatives are dangerous**.
+
+#### Examples
+
+- Disease Detection
+- Cancer Prediction
+- Intrusion Detection
+
+```text
+Failing to detect disease = dangerous
+```
+
+---
+
+### 4. F1 Score
+
+Harmonic mean of Precision and Recall.
+
+$$
+F1=2\times\frac{Precision\times Recall}{Precision+Recall}
+$$
+
+#### Use Cases
+
+Used when:
+- classes are imbalanced
+- both precision and recall matter
+
+#### Examples
+
+- Medical Diagnosis
+- Fraud Detection
+- Recommendation Systems
+
+---
+
+### Quick Summary
+
+| Metric | Focus | Best Used When |
+|---|---|---|
+| Accuracy | Overall correctness | Balanced dataset |
+| Precision | Low False Positives | FP costly |
+| Recall | Low False Negatives | FN dangerous |
+| F1 Score | Balance of Precision + Recall | Imbalanced dataset |
+
+
