@@ -16,7 +16,7 @@ Output can be:
 
 ---
 
-### Logistic Regression
+### 1. Logistic Regression
 
 Used for **classification problems** (mostly binary classification).
 
@@ -333,5 +333,3 @@ Used when:
 | Precision | Low False Positives | FP costly |
 | Recall | Low False Negatives | FN dangerous |
 | F1 Score | Balance of Precision + Recall | Imbalanced dataset |
-
-
