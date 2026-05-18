@@ -188,6 +188,11 @@ Where:
 ### Information Gain Intuition
 
 - High Information Gain → better feature
+- Information Gain tells us:
+
+- How useful a feature/question is for splitting the data correctly.
+- Mathematical intuition : Information Gain = Entropy(before split) - Entropy(after split)
+  
 - Goal:
   - reduce entropy
   - create pure nodes
