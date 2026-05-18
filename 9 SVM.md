@@ -54,71 +54,20 @@ $$
 Prediction rule:
 
 $$
-\hat y = sign(w^T x + b)
-if y is positive right/top of the hyperplane class is predicted else left/below class is predicted. 
+\hat y = sign(w^T x + b) 
 $$
 
----
+### Interpretation
 
-### Maximum Margin Objective (Hard Margin)
+- If \( w^T x + b > 0 \)
 
-If data is perfectly separable:
+  → the point lies on the **right/top side** of the hyperplane  
+  → the positive class is predicted
 
-Minimize:
+- If \( w^T x + b < 0 \)
 
-$$
-\frac{1}{2}||w||^2
-$$
-
-Subject to (for labels $y_i \in \{+1,-1\}$):
-
-$$
-y_i(w^T x_i + b) \ge 1
-$$
-
-Margin is:
-
-$$
-	ext{Margin} = \frac{2}{||w||}
-$$
-
-So minimizing $||w||$ maximizes margin.
-
----
-
-### Soft Margin SVM (Handles Noise / Overlap)
-
-Real-world data is not perfectly separable.
-
-We allow some violations using slack variables $\xi_i$.
-
-Minimize:
-
-$$
-\frac{1}{2}||w||^2 + C\sum_{i=1}^{m}\xi_i
-$$
-
-Subject to:
-
-$$
-y_i(w^T x_i + b) \ge 1 - \xi_i, \quad \xi_i \ge 0
-$$
-
----
-
-### Role of C (Regularization)
-
-`C` controls the trade-off:
-
-- Large `C` → tries to classify all training points correctly
-  - low bias, high variance (can overfit)
-- Small `C` → allows more misclassification
-  - higher bias, lower variance (more generalization)
-
-```text
-C ↑  => narrower margin, fewer errors allowed
-C ↓  => wider margin, more errors allowed
-```
+  → the point lies on the **left/below side** of the hyperplane  
+  → the negative class is predicted
 
 ---
 
@@ -157,50 +106,22 @@ Idea: map input to higher dimension so separation becomes linear.
 
 Instead of explicitly creating new features, SVM uses a kernel function:
 
-$$
-K(x, z) = \phi(x)^T\phi(z)
-$$
-
 Common kernels:
 
 #### 1) Linear Kernel
 
-$$
-K(x,z) = x^T z
-$$
-
 #### 2) Polynomial Kernel
-
-$$
-K(x,z) = (\gamma x^T z + r)^d
-$$
 
 #### 3) RBF / Gaussian Kernel (Most common)
 
-$$
-K(x,z) = exp(-\gamma ||x-z||^2)
-$$
-
----
-
 ### Role of γ (Gamma) in RBF
-
-- Large $\gamma$ → each point has small influence region
-  - complex boundary (overfitting risk)
-- Small $\gamma$ → smoother boundary
-  - underfitting risk
-
-```text
-gamma ↑  => more wiggly boundary
-gamma ↓  => smoother boundary
-```
 
 ---
 
 ### Steps to Build an SVM Model
 
 1. Prepare dataset (X, y)
-2. **Feature scaling is important** (especially for RBF kernel)
+2. **Feature scaling is important as we calculate margin** (especially for RBF kernel)
 3. Choose kernel:
    - linear (fast, high-dimensional sparse)
    - RBF (general purpose)
@@ -251,7 +172,6 @@ SVM is naturally binary, but supports multiclass using:
 ### Important Interview Points
 
 - SVM maximizes margin; boundary depends on **support vectors**
-- `C` controls margin vs training errors
 - `gamma` controls smoothness in RBF kernel
 - Always scale features for distance-based kernels
 
