@@ -1,88 +1,167 @@
-
 ### 5. SVM (Support Vector Machine)
 
-A supervised learning algorithm used mainly for:
+A supervised learning algorithm mainly used for:
 - Classification
-- (Also works for regression → SVR)
+- Regression (SVR)
 
-Goal: find a **decision boundary (hyperplane)** that separates classes with the **maximum margin**.
+Goal:
+- find the best separating boundary between classes
+- maximize margin for better generalization
 
 ---
 
-### Key Terms
+### Intuition
 
-- **Hyperplane/Hyperline**: the boundary/line that separates classes.
-- **Margin**: distance between hyperplane and the closest points from each class.
-- **Support Vectors**: the closest data points to the hyperplane.
+Suppose we have:
+- Red balls
+- Green balls
 
+SVM tries to create a separating line/plane between them.
+
+![SVM Hyperplane](https://media.geeksforgeeks.org/wp-content/uploads/20250807122724737293/support_vectors_hyperplane.webp)
+
+---
+
+### Important Terms
+
+#### Hyperline
+
+A separating line in **2D space**.
+
+Example:
 ```text
-Wider Margin  => better generalization
-Support Vectors => only points that matter most
+x-axis + y-axis → 2D
 ```
 
 ---
 
-### Intuition (2D)
+#### Hyperplane
 
-For 2 features, the boundary is a line:
+A separating boundary in **higher dimensions**.
+
+Examples:
+- 2D → line
+- 3D → plane
+- nD → hyperplane
+
+Used to separate classes.
+
+---
+
+#### Margin
+
+Distance between:
+- hyperplane
+- nearest data points
 
 ```text
-Class +      |     Class -
-   +  +      |   -   -
-      +      |     -
--------------(hyperplane)-------------
-       ^          ^
-   support     support
-   vector      vector
+Larger Margin = Better Generalization
 ```
 
-SVM tries to place the line so that the margin is maximum.
+---
+
+#### Support Vectors
+
+Closest points to the hyperplane.
+
+These points:
+- decide boundary position
+- are most important data points
+
+Removing them changes hyperplane.
+
+---
+
+### Visualization
+
+```text
+Red Class        Margin        Green Class
+   ●  ●             |             ○   ○  ○
+ ●   ●   ●          |              ○ ○ ○
+   ●  ●             |            ○ ○  ○
+---------------- Hyperplane ----------------
+         ^                       ^
+   Support Vector           Support Vector
+```
 
 ---
 
 ### Hyperplane Equation
 
-In n-dimensions:
-
 $$
-w^T x + b = 0
+w^Tx+b=0
 $$
 
-- $w$ → weights (normal vector)
-- $b$ → bias
+Where:
+- `x` → input point/features
+- `w` → weights/slopes
+- `b` → bias/intercept
 
-Prediction rule:
+#### Bias Meaning
 
-$$
-\hat y = sign(w^T x + b) 
-$$
+Bias shifts the hyperplane:
+- left/right
+- up/down
 
-### Interpretation
-
-- If \( w^T x + b > 0 \)
-
-  → the point lies on the **right/top side** of the hyperplane  
-  → the positive class is predicted
-
-- If \( w^T x + b < 0 \)
-
-  → the point lies on the **left/below side** of the hyperplane  
-  → the negative class is predicted
+similar to intercept in linear regression.
 
 ---
 
-### Loss Function (Hinge Loss)
-
-SVM is commonly explained using hinge loss.
-
-For one sample:
+### Prediction Rule
 
 $$
-L = max(0, 1 - y(w^T x + b))
+\hat y = sign(w^Tx+b)
 $$
 
-- If correctly classified with margin ≥ 1 → loss = 0
-- If inside margin / misclassified → positive loss
+#### Interpretation
+
+If:
+
+$$
+w^Tx+b>0
+$$
+
+→ belongs to positive/red class
+
+If:
+
+$$
+w^Tx+b<0
+$$
+
+→ belongs to negative/green class
+
+---
+
+### Hinge Loss Function
+
+SVM commonly uses **Hinge Loss**.
+
+#### Formula
+
+$$
+L=max(0,1-y(w^Tx+b))
+$$
+
+---
+
+### Interpretation
+
+- Correctly classified + outside margin:
+  
+```text
+Loss = 0
+```
+
+- Misclassified / inside margin:
+
+```text
+Loss > 0
+```
+
+Goal:
+- minimize hinge loss
+- maximize margin
 
 ---
 
@@ -90,53 +169,197 @@ $$
 
 #### Linear SVM
 
-Use when data is roughly linearly separable.
+Used when data is:
+- linearly separable
+
+Example:
+```text
+Straight line can separate classes
+```
+
+---
 
 #### Non-Linear SVM
 
-Use when classes need a curved boundary. i.e classes are not linearly separable via plane/line.
+Used when:
+- straight line cannot separate data
 
-Solution → **Kernel Trick**.
+Solution:
+```text
+Kernel Trick
+```
 
 ---
 
 ### Kernel Trick
 
-Idea: map input to higher dimension so separation becomes linear.
+Maps data into higher dimensions
+so separation becomes easier.
 
-Instead of explicitly creating new features, SVM uses a kernel function:
+#### Data Dimension
 
-Common kernels:
+Dimension = number of input features.
 
-#### 1) Linear Kernel
+Example:
 
-#### 2) Polynomial Kernel
+```text
+Height + Weight
+```
 
-#### 3) RBF / Gaussian Kernel (Most common)
+→ 2D data
 
-### Role of γ (Gamma) in RBF
+```text
+Height + Weight + Age
+```
+
+→ 3D data
+
+Higher dimensions can help separation.
 
 ---
 
-### Steps to Build an SVM Model
+### Common Kernels
 
-1. Prepare dataset (X, y)
-2. **Feature scaling is important as we calculate margin** (especially for RBF kernel)
+#### 1. Linear Kernel
+
+Used for:
+- linearly separable data
+- text classification
+
+Fastest kernel.
+
+---
+
+#### 2. Polynomial Kernel
+
+Creates curved boundaries.
+
+Useful when relationships are polynomial.
+
+---
+
+### 3. RBF / Gaussian Kernel
+
+Most commonly used kernel.
+
+Creates highly flexible non-linear boundaries.
+
+Works well for complex datasets.
+
+#### Formula
+
+$$
+K(x_i,x_j)=\exp(-\gamma ||x_i-x_j||^2)
+$$
+
+Where:
+- `xᵢ , xⱼ` → two data points
+- `||xᵢ - xⱼ||²` → squared Euclidean distance
+- `γ` (gamma) → controls influence of points
+- `exp` → exponential function
+
+---
+
+### Intuition
+
+- Nearby points → high similarity
+- Far points → low similarity
+
+RBF maps data into higher dimensions
+where linear separation becomes possible.
+
+---
+
+### Gamma (γ) in RBF Kernel
+
+Controls influence region of each point.
+
+#### Small γ
+
+- smoother boundary
+- wider influence
+- less overfitting
+
+```text
+Large smooth curves
+```
+
+#### Large γ
+
+- very complex boundary
+- narrow influence
+- may overfit
+
+```text
+Highly wiggly boundary
+```
+
+### Hyperparameter C
+
+Controls tradeoff between:
+- margin size
+- classification error
+
+#### Small C
+
+- larger margin
+- allows some misclassification
+- less overfitting
+
+#### Large C
+
+- smaller margin
+- strict classification
+- may overfit
+
+---
+
+### Steps to Build SVM
+
+1. Prepare dataset `(X,y)`
+2. Perform feature scaling
 3. Choose kernel:
-   - linear (fast, high-dimensional sparse)
-   - RBF (general purpose)
-4. Tune hyperparameters:
+   - Linear
+   - Polynomial
+   - RBF
+4. Tune:
    - `C`
-   - `gamma` (for RBF)
-   - `degree` (for polynomial)
-5. Train model and evaluate (Accuracy / Precision / Recall / F1)
+   - `gamma`
+   - `degree`
+5. Train + evaluate model
+
+Metrics:
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+
+---
+
+### Feature Scaling
+
+Very important in SVM because:
+- SVM depends on distances/margins
+
+Without scaling:
+- larger features dominate calculations
+
+Example:
+
+```text
+Age = 20
+Salary = 200000
+```
+
+Salary dominates distance.
 
 ---
 
 ### Multiclass SVM
 
-SVM is naturally binary, but supports multiclass using:
+SVM is naturally binary.
 
+For multiclass:
 - One-vs-Rest (OvR)
 - One-vs-One (OvO)
 
@@ -144,34 +367,38 @@ SVM is naturally binary, but supports multiclass using:
 
 ### Advantages
 
-- Works well in high-dimensional space
-- Effective when number of features > number of samples
-- Good margin-based generalization
-- Uses only support vectors (memory efficient after training)
+- Works well in high-dimensional data
+- Effective for complex boundaries
+- Good generalization
+- Memory efficient
 
 ---
 
 ### Disadvantages
 
-- Training can be slow on very large datasets
+- Slow on very large datasets
 - Sensitive to feature scaling
-- Kernel + hyperparameter selection can be tricky
-- Less interpretable than linear/logistic regression
+- Kernel selection can be difficult
+- Less interpretable
 
 ---
 
 ### Applications
 
-- Text classification (spam, sentiment)
-- Image classification (small/medium datasets)
-- Bioinformatics (gene classification)
-- Handwriting recognition
+- Spam Detection
+- Image Classification
+- Handwriting Recognition
+- Face Detection
+- Bioinformatics
+- Sentiment Analysis
 
 ---
 
 ### Important Interview Points
 
-- SVM maximizes margin; boundary depends on **support vectors**
-- `gamma` controls smoothness in RBF kernel
-- Always scale features for distance-based kernels
-
+- SVM maximizes margin
+- Support vectors define hyperplane
+- Feature scaling is important
+- RBF kernel is most commonly used
+- `gamma` controls boundary smoothness
+- `C` controls margin vs misclassification tradeoff
