@@ -1,182 +1,171 @@
-### 10. Model Tuning (Hyperparameter Tuning)
+### Model Tuning (Hyperparameter Tuning)
 
-Model tuning means adjusting a model’s **hyperparameters** to make it perform better on **new/unseen data**.
+Improving model performance on:
+- unseen data
+- validation/test data
 
-In simple words:
-- We don’t change the dataset
-- We don’t change the algorithm
-- We change the **hyperparameters** of the algorithm
+We:
+- do NOT change dataset
+- do NOT change algorithm
+- only tune hyperparameters
 
----
-
-### What Do We Tune?
-
-Hyperparameters are values we choose **before/during training**.
-
----
-
-### Hyperparameter (Simple Meaning)
-
-A hyperparameter is a value we set before training that controls how the model learns.
-
-Difference:
-- **Model parameters** (learned from data) → weights/coefficients/bias
-- **Hyperparameters** (chosen by us) → learning settings
-
-Example:
-- In KNN, `k` is a hyperparameter
-- In Decision Tree, `max_depth` is a hyperparameter
-
-Examples:
-- KNN: `k` (number of neighbors)
-- Decision Tree: `max_depth`, `min_samples_split`
-- SVM: `C`, kernel type, `gamma`
-- Regularization: `lambda` in Ridge/Lasso
-
-> Hyperparameters are not learned from data like weights/coefficients.
-
----
-
-### Goal of Tuning
-
-Main goal:
-- improve **generalization** (good performance on validation/test)
-
-Not the goal:
-- getting very high **training** accuracy (can cause overfitting)
-
----
-
-### Basic Tuning Workflow
-
-#### Step 1: Split Data
-
-- Training set → learns the model
-- Validation set → selects best hyperparameters
-- Test set → final unbiased evaluation
-
----
-
-#### Step 2: Try Multiple Settings
-
-Example (KNN):
+Goal:
 
 ```text
-k = 1, 3, 5, 7, 9...
-```
-
-Example (SVM):
-
-```text
-C = 0.1, 1, 10
-kernel = linear, rbf
+Better Generalization
 ```
 
 ---
 
-#### Step 3: Evaluate on Validation
+### Hyperparameters
 
-Choose a metric based on the problem:
-- Classification: Accuracy, Precision, Recall, F1-score, AUC
-- Regression: MAE, MSE, RMSE, R2
+Values set before training.
 
----
+They control:
+- learning behavior
+- model complexity
 
-#### Step 4: Select Best Hyperparameters
+| Model | Hyperparameters |
+|---|---|
+| KNN | `n_neighbors (k)` |
+| Decision Tree | `max_depth`, `min_samples_split` |
+| SVM | `C`, `kernel`, `gamma` |
+| Random Forest | `n_estimators` |
+| Ridge/Lasso | `lambda (α)` |
 
-Pick the settings that give the best validation score.
-
----
-
-#### Step 5: Final Test
-
-After selecting hyperparameters:
-- evaluate once on **test set**
-
-> Don’t tune using the test set (data leakage).
+> Parameters are learned from data, hyperparameters are chosen manually.
 
 ---
 
-### Common Tuning Methods
-
-#### 1) Manual Search (Trial-and-Error)
-
-Manual search means:
-- try a few values based on intuition/experience
-- check validation score
-- adjust again (repeat)
-
-Common approach:
-1. Start with a reasonable default
-2. Change **one hyperparameter at a time**
-3. Narrow the range around the best value
-
-Example:
+### Basic Workflow
 
 ```text
-Decision Tree:
-max_depth = 2, 4, 6, 8
-pick the best validation score
+Dataset
+   ↓
+Train Model
+   ↓
+Try Multiple Hyperparameters
+   ↓
+Evaluate
+   ↓
+Select Best Combination
 ```
 
-Pros:
-- simple and fast for small problems
+---
 
-Cons:
-- may miss the best combination (not systematic)
+### Data Split
 
-#### 2) Cross Validation (CV)
+```text
+Training Set   → learning
+Validation Set → tuning
+Test Set       → final evaluation
+```
 
-Cross validation is a method to evaluate a model by training it **multiple times** on different parts of the data.
+> Never tune on test set → data leakage.
 
-Most common type: **K-Fold Cross Validation**.
+---
+
+### Example Hyperparameters
+
+#### KNN
+
+```text
+k = 1,3,5,7,9
+```
+
+#### SVM
+
+```text
+C = 0.1,1,10
+kernel = linear,rbf
+```
+
+---
+
+### Evaluation Metrics
+
+Classification:
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+
+Regression:
+- MAE
+- MSE
+- RMSE
+- R²
+
+---
+
+### Cross Validation (CV)
+
+Problem:
+
+```text
+What if current train-validation split is bad?
+```
+
+Maybe:
+- overfitting
+- underfitting
+- biased score
+
+Solution:
+```text
+K-Fold Cross Validation
+```
 
 ---
 
 ### K-Fold Cross Validation
 
-Idea:
-- split the dataset into `K` equal parts (folds)
-- train `K` times
-- each time, use a different fold as **validation** and remaining folds as **training**
-
-Important:
-- it is the **same model type/class**, but it is **re-trained from scratch** `K` times
-- think of it as `K` separate fits (conceptually `K` model instances/objects)
-
-#### Steps
-
-1. Choose `K`
-
+Split dataset into:
 ```text
-K = 5 (5-fold CV)
+K equal folds
 ```
 
-2. Split data into 5 folds
+Usually:
 
 ```text
-F1  F2  F3  F4  F5
+K = 5
 ```
 
-3. Train and validate `K` times
+![K Fold CV](https://editor.analyticsvidhya.com/uploads/57458kzw7d4mp9b45VFQN2wjKu1K8J9KrDh.png)
+
+---
+
+### Working
 
 ```text
-Run 1: Train on F2+F3+F4+F5, Validate on F1
-Run 2: Train on F1+F3+F4+F5, Validate on F2
-Run 3: Train on F1+F2+F4+F5, Validate on F3
-Run 4: Train on F1+F2+F3+F5, Validate on F4
-Run 5: Train on F1+F2+F3+F4, Validate on F5
+F1 F2 F3 F4 F5
 ```
 
-4. Take the average validation score
-
-If validation scores are:
+#### Runs
 
 ```text
-0.82, 0.80, 0.84, 0.81, 0.83
+Run 1 → Train(F2,F3,F4,F5) Validate(F1)
+
+Run 2 → Train(F1,F3,F4,F5) Validate(F2)
+
+Run 3 → Train(F1,F2,F4,F5) Validate(F3)
+
+Run 4 → Train(F1,F2,F3,F5) Validate(F4)
+
+Run 5 → Train(F1,F2,F3,F4) Validate(F5)
 ```
 
-Final CV score:
+---
+
+### Final CV Score
+
+Average of all validation scores.
+
+Example:
+
+```text
+0.82,0.80,0.84,0.81,0.83
+```
 
 $$
 CV\ Score=\frac{0.82+0.80+0.84+0.81+0.83}{5}
@@ -184,108 +173,195 @@ $$
 
 ---
 
-### Why Use Cross Validation?
+### Why CV?
 
-Pros:
-- uses data efficiently (every point becomes validation once)
-- more reliable than a single train/validation split
+#### Advantages
 
-Cons:
-- slower (training happens `K` times)
+- reliable evaluation
+- every sample validated once
+- better data usage
 
-> For classification with imbalanced classes, use **Stratified K-Fold**.
+#### Disadvantages
 
-#### 3) Grid Search CV
+- slower
+- trains model K times
 
-Grid Search CV means:
-- try **all combinations** of hyperparameters from a given grid
-- a grid has some values for all the hyperparameters of a given model.
-- for each combination, evaluate using **Cross Validation (CV)**
-- choose the combination with the best **average CV score**
+> Stratified K-Fold is preferred for imbalanced datasets.
 
 ---
 
-### Steps (Grid Search CV)
+### Hyperparameter Tuning Methods
 
-1. Create a grid (list of values)
+---
 
-Example (SVM):
+#### 1. Manual Search
+
+Try values manually.
+
+Example:
 
 ```text
-C = [0.1, 1, 10]
-gamma = [0.01, 0.1]
-kernel = [rbf]
+max_depth = 2,4,6,8
 ```
 
-2. For each combination, do K-Fold CV
-- train `K` times (each fold)
-- take average score
+Workflow:
+```text
+Try → Train → Evaluate → Repeat
+```
 
-3. Select best hyperparameters
+##### Pros
 
-4. Re-train (refit) using best hyperparameters on full training data
+- simple
+- fast for small tasks
 
-5. Evaluate once on test set
+##### Cons
+
+- not systematic
+- may miss best combination
+
+---
+
+#### 2. Grid Search CV
+
+Tries:
+```text
+ALL possible combinations
+```
+
+with:
+```text
+Cross Validation
+```
+
+---
+
+### Example Grid
+
+```text
+n_neighbors = [3,5,7]
+weights = [uniform,distance]
+metric = [euclidean,manhattan]
+```
+
+---
+
+### What Happens?
+
+```text
+(3,uniform,euclidean)
+(3,uniform,manhattan)
+(3,distance,euclidean)
+...
+```
+
+Each combination:
+- trained
+- validated using CV
+
+Best average score:
+```text
+→ Best Hyperparameters
+```
 
 ---
 
 ### Training Cost
 
-Total model trainings:
-
 $$
-Total\ Trainings \approx (Total No. of combinations)\times K
+Total\ Trainings=(Combinations)\times K
 $$
 
-So it can be slow when the grid is large.
+Can become slow for large grids.
 
 ---
 
-### Pros / Cons
+##### Pros
 
-Pros:
-- systematic (checks all combinations)
-- usually gives a strong baseline
+- systematic
+- strong baseline
 
-Cons:
-- slow for large grids
+##### Cons
 
-#### 4) Random Search
+- computationally expensive
 
-Random search means:
-- choose a range/list for each hyperparameter
-- randomly sample a fixed number of combinations
-- evaluate and pick the best one
+---
 
-Example (SVM):
+#### 3. Randomized Search CV
 
+Instead of checking all combinations:
 ```text
-C in [0.001, 0.01, 0.1, 1, 10]
-gamma in [0.001, 0.01, 0.1, 1]
+randomly samples combinations
 ```
 
-Instead of trying all pairs, we test only `N` random combinations.
+Faster for large search spaces.
 
-#### Steps
+---
 
-1. Define ranges/distributions for hyperparameters
-2. Choose number of trials
+### Example
 
 ```text
-N = 20 random combinations
+C = [0.001,0.01,0.1,1,10]
+gamma = [0.001,0.01,0.1,1]
 ```
 
-3. For each trial:
-- train model
-- evaluate on validation (or CV)
-4. Select best hyperparameters
+Randomly tests:
+```text
+N combinations
+```
 
-Pros:
-- faster than grid search for large search spaces
-- can find good results with fewer trials
+Example:
 
-Cons:
-- not guaranteed to try the best combination
+```text
+N = 20
+```
 
-> If you use CV with random search, total trainings become `N × K`.
+---
 
+### Working
+
+1. define parameter ranges
+2. randomly sample combinations
+3. train + validate
+4. choose best score
+
+---
+
+### Training Cost
+
+$$
+Total\ Trainings=N\times K
+$$
+
+---
+
+##### Pros
+
+- much faster
+- works well for large search spaces
+
+##### Cons
+
+- may miss best combination
+
+---
+
+### Grid vs Random Search
+
+![Grid vs Random Search](https://miro.medium.com/v2/resize:fit:1200/1*WOB7yoQMg6IE0CiO0_l6bg.png)
+
+| Feature | Grid Search | Random Search |
+|---|---|---|
+| Checks All Combinations | Yes | No |
+| Speed | Slow | Faster |
+| Large Search Space | Poor | Good |
+
+---
+
+### Important Interview Points
+
+- Hyperparameters are manually chosen
+- Parameters are learned from data
+- CV gives reliable evaluation
+- Grid Search = exhaustive search
+- Random Search = random sampling
+- K-Fold retrains model K times
