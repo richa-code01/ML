@@ -11,7 +11,7 @@ In simple words:
 ### Why Ensemble Works?
 
 If individual models make different errors, combining them can:
-- reduce **variance** (more stable)
+- reduce **variance** (more stable) i.e reduces overfitting.
 - sometimes reduce **bias** (more accurate)
 
 Goal:
@@ -73,7 +73,7 @@ Sampling method:
 - **bootstrap** sampling = sample with replacement
 
 Why bagging is used:
-- mainly reduces **variance**
+- mainly reduces **variance** i.e avoids overfitting.
 - helps unstable models (like decision trees)
 
 ---
@@ -117,6 +117,7 @@ In simple words:
 Why boosting is used:
 - reduces **bias** and improves accuracy
 - can also reduce error step-by-step
+- avoids underfitting.
 
 ---
 
@@ -252,7 +253,7 @@ If $P(Yes) > 0.5$ then final class = `Yes`.
 
 Bagging:
 - models are trained in parallel
-- mainly reduces variance
+- mainly reduces variance i.e overfitiing.
 - example: Random Forest
 
 Boosting:
