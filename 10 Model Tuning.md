@@ -234,7 +234,7 @@ kernel = [rbf]
 Total model trainings:
 
 $$
-Total\ Trainings \approx (\#\ combinations)\times K
+Total\ Trainings \approx (Total No. of combinations)\times K
 $$
 
 So it can be slow when the grid is large.
