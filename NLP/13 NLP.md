@@ -218,6 +218,19 @@ $$
 TF\text{-}IDF(t,d)=TF(t,d)\times IDF(t)
 $$
 
+Pros:
+- better than plain word counts because common words get down-weighted
+- often works very well with classic ML models (Logistic Regression, SVM, Naive Bayes)
+- simple, fast, and interpretable (you can inspect important words)
+- works well for large vocabularies because it is sparse
+
+Limitations:
+- still does not understand meaning (synonyms/polysemy are not handled)
+- mostly ignores word order (unless you add n-grams)
+- sparse and high-dimensional → can be memory heavy for huge corpora
+- out-of-vocabulary (new words at test time are ignored)
+- IDF depends on the corpus; on very small datasets it can be noisy
+
 #### N-grams in TF-IDF
 
 So far we assumed each **feature** is a single word (this is called a **unigram**).
@@ -284,16 +297,82 @@ Common choices:
 
 ### 4) Word Embeddings
 
-Embeddings represent words as dense vectors (captures meaning).
+Word embeddings represent each word as a **dense vector** (a small list of real numbers), usually 50–300 dimensions.
 
-Common embeddings:
-- Word2Vec (CBOW, Skip-gram)
-- GloVe
-- FastText
+Core idea:
+- instead of one-hot vectors (very large + sparse), we learn a compact vector for each word
+- words used in similar contexts get similar vectors (distributional hypothesis)
 
-Properties:
-- similar words have similar vectors
-- captures relationships
+You can think of an embedding model as learning an **embedding matrix** $E$:
+
+$$
+E \in \mathbb{R}^{|V|\times d}
+$$
+
+where:
+- $|V|$ = vocabulary size
+- $d$ = embedding dimension
+- row $E[w]$ = vector for word $w$
+
+#### Why embeddings are better than BoW/TF-IDF
+- dense (less memory than huge sparse vectors)
+- captures some meaning/relatedness ("movie" close to "film")
+- can generalize better because similar words have similar vectors
+
+#### Common (static) embedding methods
+
+##### 1) Word2Vec
+
+Two training styles:
+
+- **CBOW (Continuous Bag of Words):** predict the center word using surrounding context words
+- **Skip-gram:** predict surrounding context words using the center word
+
+Simple intuition:
+- if "cricket" often appears near "bat", "match", "runs", then the model adjusts vectors so these words become close in the embedding space.
+
+Note:
+- Word2Vec is often trained with **negative sampling** (train on true word-context pairs and a few random "fake" pairs) to make it fast.
+
+##### 2) GloVe
+
+Idea:
+- uses global word co-occurrence counts (how often word $i$ appears near word $j$)
+- learns vectors so that dot products roughly match co-occurrence patterns
+
+In practice:
+- works well for many general-purpose embeddings
+
+##### 3) FastText
+
+Idea:
+- represents a word using **subword / character n-grams**
+- helpful for rare words and morphologically rich languages
+
+Example intuition:
+- word: "playing" shares subwords with "play", "player", "played" → better handling of unseen/rare words
+
+#### How embeddings are used in a model
+
+For a sentence:
+
+```text
+"I love NLP" → [I, love, NLP] → [vec(I), vec(love), vec(NLP)]
+```
+
+Then we can:
+- average/sum vectors to get a simple sentence vector (baseline), OR
+- feed the sequence into a model (RNN/CNN/Transformer)
+
+Pros:
+- dense + compact representation
+- captures semantic similarity better than one-hot/BoW
+- useful when you don’t have huge labeled data (pretrained embeddings help)
+
+Limitations:
+- **static**: each word has only one vector ("bank" has one vector for all meanings)
+- still not true "understanding"; depends on training data
+- pretrained embeddings may not capture domain-specific meanings (medical/legal)
 
 Example idea:
 
@@ -305,21 +384,70 @@ vec("king") - vec("man") + vec("woman") ≈ vec("queen")
 
 ### 5) Contextual Embeddings
 
-Same word can have different meaning in different sentences.
+Contextual embeddings solve a key weakness of static embeddings:
+
+- **static embedding:** one word → one vector (same vector everywhere)
+- **contextual embedding:** one word → different vector depending on the sentence
 
 Example:
 
 ```text
-"bank" (river bank)
-"bank" (money bank)
+"I sat on the bank of the river"   → bank = river-side meaning
+"I deposited money in the bank"    → bank = finance meaning
 ```
 
-Contextual models:
-- BERT
-- GPT
-- RoBERTa
+In contextual models, the embedding for "bank" is different in these two sentences.
 
-They generate embeddings depending on the context.
+#### How contextual embeddings are produced
+
+Most modern contextual embeddings come from **Transformer** models.
+
+Pipeline idea:
+1. text is tokenized (often into subwords)
+2. model processes the whole sequence with attention
+3. output is a vector for each token that already includes context
+
+So for:
+
+```text
+"I love NLP" → vectors: [h1, h2, h3]
+```
+
+each $h_i$ depends on the entire sentence.
+
+#### Common contextual models
+
+- **BERT / RoBERTa (encoder models):**
+	- trained mainly with **Masked Language Modeling (MLM)**
+	- great for understanding tasks (classification, NER, QA)
+	- produces strong representations for each token
+
+- **GPT (decoder models):**
+	- trained with **next-token prediction**
+	- great for text generation
+	- also provides contextual token representations internally
+
+#### How contextual embeddings are used
+
+Two common ways:
+
+1) **Token-level tasks** (need a label per token)
+- NER, POS tagging
+- use the token vectors directly
+
+2) **Sentence/document-level tasks**
+- classification, retrieval
+- you can use a special pooled vector (e.g., [CLS] in BERT) or mean-pool all token vectors
+
+Pros:
+- handles polysemy (same word, different meaning)
+- captures richer information than TF-IDF/static embeddings
+- strong performance across many NLP tasks with fine-tuning
+
+Limitations:
+- heavier compute + memory (training and inference)
+- harder to interpret than TF-IDF
+- needs careful fine-tuning to avoid overfitting on small datasets
 
 ---
 
