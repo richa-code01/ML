@@ -236,6 +236,25 @@ Unigrams : [this, movie, is, not, good]
 Bigrams  : [this movie, movie is, is not, not good]
 ```
 
+Why bigrams can beat unigrams (simple example):
+
+```text
+S1: "cricket is not good"
+S2: "cricket is very good"
+
+Unigram vocab  : [cricket, is, not, very, good]
+S1 unigram vec : [1, 1, 1, 0, 1]
+S2 unigram vec : [1, 1, 0, 1, 1]
+
+These vectors share most words, so they look very similar,thus cosine similarity will be high even though the meanings are opposite.
+
+Bigram vocab   : [cricket is, is not, not good, is very, very good]
+S1 bigram vec  : [1, 1, 1, 0, 0]
+S2 bigram vec  : [1, 0, 0, 1, 1]
+
+Now the key phrases "not good" vs "very good" become different features and the vectors will have low similarity as expected.
+```
+
 When we use TF-IDF with n-grams, the **vocabulary** can contain unigrams + bigrams + trigrams, and the document-term matrix becomes larger.
 
 How it helps:
