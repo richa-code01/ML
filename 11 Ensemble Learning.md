@@ -2,7 +2,7 @@
 
 Ensemble Learning means:
 ```text
-Combining multiple models to get better prediction
+Combining multiple ML models to get better prediction
 ```
 
 Idea:
@@ -20,8 +20,18 @@ Listening to crowd opinion
 
 Combining models can:
 - reduce variance → less overfitting
-- reduce bias → more accurate
+- reduce bias → better accuracy
 - improve generalization on unseen data
+
+Single model:
+```text
+May overfit / underfit
+```
+
+Multiple models:
+```text
+More stable + generalized
+```
 
 ---
 
@@ -73,6 +83,11 @@ P(Yes)=(0.7+0.4+0.8)/3=0.63
 Final → Yes
 ```
 
+Soft voting is usually better because:
+```text
+Uses confidence/probabilities
+```
+
 ---
 
 #### Regression → Averaging
@@ -95,7 +110,7 @@ $$
 
 ---
 
-## 1. Bagging (Bootstrap Aggregation)
+# 1. Bagging (Bootstrap Aggregation)
 
 Idea:
 - train same algorithm multiple times
@@ -105,6 +120,21 @@ Idea:
 Main Goal:
 ```text
 Reduce Variance / Overfitting
+```
+
+Bagging converts:
+```text
+Overfitting Model → Generalized Model
+```
+
+Best for:
+```text
+High Variance Models
+```
+
+Example:
+```text
+Decision Trees
 ```
 
 ---
@@ -118,7 +148,7 @@ with replacement
 
 Meaning:
 - same datapoint can repeat
-- some datapoints may be absent
+- some datapoints may not appear
 
 ---
 
@@ -154,6 +184,11 @@ but samples are not identical.
     SVM     SVM    SVM    SVM
 ```
 
+All models:
+```text
+Train Independently / Parallelly
+```
+
 ---
 
 ### Final Prediction
@@ -185,26 +220,105 @@ Take Mean Prediction
 
 ---
 
-### Random Forest
+## Random Forest Classifier
 
 Most popular bagging algorithm.
 
 Random Forest:
 ```text
-Collection of Decision Trees
+Collection of Multiple Decision Trees
 ```
 
 ---
 
 ### Random Forest Working
 
-Each tree:
-- trained on bootstrap sample
-- uses random subset of features
+Suppose:
+```text
+1000 datapoints
+```
 
-Final prediction:
-- majority voting
-- or averaging
+Bootstrap samples created:
+
+```text
+600 random datapoints
+```
+
+for each tree.
+
+---
+
+### Tree Construction
+
+For every split:
+- random subset of features selected
+- entropy + information gain calculated
+
+Example:
+
+```text
+Possible Features:
+[temp, outlook, wind]
+```
+
+Randomly select:
+```text
+[temp, outlook]
+```
+
+then calculate:
+- entropy
+- information gain
+
+best feature becomes root node.
+
+---
+
+### Example Trees
+
+#### Tree 1
+
+```text
+                 Wind
+           /               \
+        Weak              Strong
+     /   |   \          /   |   \
+  Rain Sunny Overcast Rain Sunny Overcast
+```
+
+---
+
+#### Tree 2
+
+```text
+                 Outlook
+           /        |         \
+        Rainy     Sunny     Overcast
+```
+
+---
+
+Many such trees are created.
+
+Each tree:
+- trained differently
+- sees different samples/features
+
+---
+
+### Final Prediction
+
+#### Classification
+
+```text
+Majority Voting
+```
+
+#### Regression
+
+```text
+Average Output
+```
 
 ---
 
@@ -220,13 +334,20 @@ Thus:
 Less Overfitting
 ```
 
+Feature randomness:
+```text
+Prevents same trees from forming
+```
+
 ---
 
 ### Advantages
 
-- good accuracy
+- high accuracy
 - handles non-linear data
 - robust to overfitting
+- no feature scaling needed
+- works well on large datasets
 
 ---
 
@@ -234,10 +355,11 @@ Less Overfitting
 
 - less interpretable
 - larger/slower model
+- many trees increase memory
 
 ---
 
-## 2. Boosting
+# 2. Boosting
 
 Idea:
 ```text
@@ -247,6 +369,45 @@ Train models sequentially
 Each next model:
 ```text
 Learns from previous mistakes
+```
+
+Unlike bagging:
+```text
+Models depend on previous models
+```
+
+---
+
+### Goal
+
+Convert:
+```text
+Weak Learners → Strong Learner
+```
+
+Also converts:
+```text
+High Bias + High Variance
+        ↓
+Generalized Model
+```
+
+Best for:
+```text
+Underfitting Models
+```
+
+---
+
+### Weak Learner
+
+Model performing poorly:
+- train data
+- test data
+
+Usually:
+```text
+Underfitting
 ```
 
 ---
@@ -264,18 +425,38 @@ M1 → M2 → M3
 ```text
 M1 makes errors
 ↓
-M2 focuses on those errors
+Errors noted
 ↓
-M3 fixes remaining mistakes
+Passed to M2 with weights
+↓
+M2 focuses more on difficult points
+↓
+M3 fixes remaining errors
 ```
 
 ---
 
-### Goal
+### Weighted Models
 
-- reduce bias
-- improve accuracy
-- avoid underfitting
+Each model gets importance weight:
+
+$$
+F(x)=\alpha_1M_1+\alpha_2M_2+\alpha_3M_3+...
+$$
+
+Where:
+- `α` → model importance
+- better models get higher weight
+
+---
+
+### Types of Boosting
+
+```text
+1. AdaBoost
+2. Gradient Boosting
+3. XGBoost
+```
 
 ---
 
@@ -308,7 +489,10 @@ Usually:
 Decision Stump
 ```
 
-(small decision tree)
+Decision stump:
+```text
+Small tree with depth = 1
+```
 
 ---
 
@@ -322,6 +506,11 @@ Weight Increased
 Correct predictions:
 ```text
 Weight Decreased
+```
+
+Weights assigned based on:
+```text
+Error Intensity
 ```
 
 ---
@@ -340,6 +529,26 @@ Hard datapoints
 ```text
 Weighted Voting
 ```
+
+Better learners:
+```text
+Higher Weight
+```
+
+---
+
+### Advantages
+
+- simple boosting algorithm
+- improves weak learners
+- good for classification
+
+---
+
+### Disadvantages
+
+- sensitive to noisy data/outliers
+- sequential → slower than bagging
 
 ---
 
@@ -410,6 +619,39 @@ Improves previous prediction
 
 ---
 
+### Learning Rate
+
+Controls:
+```text
+Step Size
+```
+
+Small learning rate:
+- slower learning
+- safer
+- less overfitting
+
+Large learning rate:
+- faster
+- may overfit
+
+---
+
+### Advantages
+
+- high accuracy
+- handles complex relationships
+
+---
+
+### Disadvantages
+
+- training slower
+- tuning important
+- may overfit
+
+---
+
 ## XGBoost (Extreme Gradient Boosting)
 
 Advanced implementation of:
@@ -431,6 +673,11 @@ Uses:
 - handles overfitting
 - supports parallel processing
 - handles missing values
+
+Widely used in:
+```text
+Kaggle Competitions
+```
 
 ---
 
@@ -461,7 +708,42 @@ Small Safe Steps
 
 ---
 
-## 3. Stacking (Stacked Generalization)
+#### Parallel Processing
+
+```text
+Faster Training
+```
+
+---
+
+### Important Hyperparameters
+
+| Hyperparameter | Meaning |
+|---|---|
+| `n_estimators` | number of trees |
+| `max_depth` | tree depth |
+| `learning_rate` | step size |
+| `subsample` | row sampling |
+| `colsample_bytree` | feature sampling |
+
+---
+
+### Advantages
+
+- state-of-the-art performance
+- very accurate
+- handles missing values
+
+---
+
+### Disadvantages
+
+- tuning required
+- computationally heavy
+
+---
+
+# 3. Stacking (Stacked Generalization)
 
 Idea:
 - train multiple different models
@@ -549,6 +831,11 @@ Cross Validation
 
 so model does not predict on data it trained on.
 
+This:
+```text
+Prevents Data Leakage
+```
+
 ---
 
 ## Phase 2 → Final Prediction
@@ -582,12 +869,28 @@ YES
 
 ---
 
+### Advantages
+
+- combines strengths of models
+- often highly accurate
+
+---
+
+### Disadvantages
+
+- complex
+- slower training
+- difficult to interpret
+
+---
+
 ### Bagging vs Boosting
 
 | Feature | Bagging | Boosting |
 |---|---|---|
 | Training | Parallel | Sequential |
 | Goal | Reduce Variance | Reduce Bias |
+| Best For | Overfitting | Underfitting |
 | Overfitting | Reduced | Can Overfit |
 | Example | Random Forest | AdaBoost/XGBoost |
 
@@ -616,3 +919,6 @@ Avoid when:
 - XGBoost = optimized gradient boosting
 - Bagging reduces variance
 - Boosting reduces bias
+- Random Forest uses bootstrap + feature randomness
+- AdaBoost uses weighted learning
+- Gradient Boosting learns residuals
