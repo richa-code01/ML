@@ -1,517 +1,1224 @@
 ### 13. NLP (Natural Language Processing)
 
-NLP is a field of AI that helps machines understand, process and generate **human language** (text/speech).
+NLP is a field of AI that helps machines:
+- understand
+- process
+- generate
+
+human language (text/speech).
+
+In simple words:
+
+```text
+Human Language → Machine Understanding
+```
+
+Instead of:
+
+```text
+Only 0s and 1s
+```
+
+machines learn:
+- English
+- Hindi
+- French
+- etc.
+
+---
+
+### Real World Applications
+
+- Chatbots & Virtual Assistants
+- Gmail Spam Detection
+- Sentiment Analysis
+- Google Translate
+- Voice Assistants
+- Text Summarization
+- Search Engines
+- Auto Correct / Grammar Check
+- Recommendation Systems
+- Document Classification
 
 Examples:
-- Spam detection
-- Sentiment analysis
-- Machine translation
-- Chatbots
-- Document classification
+- Twitter sentiment analysis
+- Amazon review analysis
+- Customer feedback analysis
 
 ---
 
 ### Why NLP is Difficult?
 
-- same word can have different meanings (polysemy)
-- different words can have same meaning (synonyms)
-- grammar + context matter
-- spelling mistakes, slang, emojis
-- language is unstructured
+Language is:
+
+```text
+Unstructured + Ambiguous
+```
+
+Problems:
+- same word → multiple meanings (polysemy)
+- different words → same meaning (synonyms)
+- sarcasm/context understanding
+- spelling mistakes
+- emojis/slang
+- grammar variations
+
+Example:
+
+```text
+"Great, my laptop crashed again 😒"
+```
+
+Word:
+
+```text
+Great
+```
+
+looks positive,
+but actual sentiment is negative.
 
 ---
 
-### NLP Pipeline (High Level)
-
-1. Text collection
-2. Text cleaning + preprocessing
-3. Convert text → numbers (vectorization/embeddings)
-4. Train ML/DL model
-5. Evaluate + deploy
+### Approaches of NLP
 
 ---
 
-### Text Preprocessing
+#### 1. Rule-Based NLP (Old School NLP)
 
-Common steps (depends on task):
+Idea:
 
-#### 1) Lowercasing
+```text
+Manually write rules
+```
+
+System uses:
+- grammar rules
+- dictionaries
+- handcrafted patterns
+
+Examples:
+- spell checker
+- grammar checker
+- regex matching
+- keyword-based chatbot
+
+Example Rule:
+
+```text
+IF sentence contains "buy now"
+→ spam
+```
+
+---
+
+#### Advantages
+
+- easy for small systems
+- interpretable
+- deterministic
+
+---
+
+#### Limitations
+
+- cannot handle ambiguity
+- poor scalability
+- difficult for large datasets
+- fails on unseen patterns
+
+Example:
+
+```text
+"That movie was sick!"
+```
+
+Rule-based system may think:
+
+```text
+"sick" = negative
+```
+
+but slang meaning could be positive.
+
+---
+
+#### 2. Statistical / ML-Based NLP
+
+Language treated as:
+
+```text
+Data
+```
+
+ML models learn patterns from text.
+
+Common models:
+- Naive Bayes
+- Logistic Regression
+- SVM
+
+Requires:
+
+```text
+Text → Numbers
+```
+
+using:
+- BoW
+- TF-IDF
+- embeddings
+
+---
+
+#### Example
+
+Train on:
+
+```text
+10,000 product reviews
+```
+
+Model learns:
+- words like "good", "excellent" → positive
+- words like "bad", "worst" → negative
+
+Then predicts sentiment for new reviews.
+
+Applications:
+- spam detection
+- sentiment analysis
+- text classification
+
+---
+
+#### Limitations
+
+- loses context
+- poor semantic understanding
+- sarcasm difficult
+
+Example:
+
+```text
+"I absolutely love waiting 2 hours in traffic."
+```
+
+Model may think:
+
+```text
+love = positive
+```
+
+but actual meaning is sarcastic.
+
+---
+
+#### 3. Deep Learning NLP (Modern NLP)
+
+Uses:
+
+```text
+Neural Networks
+```
+
+to automatically learn:
+- patterns
+- context
+- semantics
+
+Models:
+- RNN
+- LSTM
+- GRU
+- Transformers
+
+Uses:
+- embeddings
+- attention
+- contextual representations
+
+Better understanding of:
+- context
+- sequence
+- meaning
+
+---
+
+### NLP Pipeline
+
+```text
+1. Data Collection
+2. Text Cleaning
+3. Tokenization
+4. Feature Extraction
+5. Model Training
+6. Evaluation
+7. Deployment
+```
+
+---
+
+### 1. Data Collection
+
+Text can come from:
+- Kaggle datasets
+- PDFs
+- text files
+- websites
+- APIs
+- social media
+- customer reviews
+- emails
+- surveys
+- chats
+- crowd sourcing
+- web scraping
+
+Libraries:
+- BeautifulSoup (bs4)
+- Scrapy
+- Selenium
+
+---
+
+### 2. Text Cleaning / Preprocessing
+
+Goal:
+
+```text
+Clean noisy text
+```
+
+---
+
+#### Lowercasing
 
 ```text
 "GOOD" → "good"
 ```
 
-#### 2) Remove punctuation / special symbols
+---
+
+#### Remove Punctuation
 
 ```text
-"hi!!!" → "hi"
+"hello!!!" → "hello"
 ```
 
-#### 3) Tokenization
+In ML-based NLP:
+- punctuation often removed
 
-Split text into words/tokens.
+In DL NLP:
+- punctuation may carry meaning
 
 Example:
 
 ```text
-"I love ML" → ["I", "love", "ML"]
+"I won!"
+"I won..."
 ```
-
-#### 4) Stopword Removal
-
-Remove very common words that may not add meaning.
-
-Example:
-
-```text
-"this is a book" → ["book"]
-```
-
-#### 5) Stemming
-
-Convert words to root form (may not be a real word).
-
-Example:
-
-```text
-"playing" → "play"
-"studies" → "studi"
-```
-
-#### 6) Lemmatization
-
-Convert words to dictionary form (meaningful base word).
-
-Example:
-
-```text
-"better" → "good"
-"running" → "run"
-```
-
-> Lemmatization is usually better than stemming but slower.
 
 ---
 
-### Text Representation (Text → Numbers) also called vectorization
-
-ML models work on numbers, so we convert each text (sentence/document) into a **vector**. sentence is also called document.
-
-Meaning:
-- a vector is just a list of numbers
-- each number behaves like a **feature** for the ML model
-
-Example (Bag of Words / TF-IDF):
-- suppose vocabulary = `[I, love, ML, NLP]`
-- then each sentence becomes a fixed-size vector of length 4
+#### Remove Numbers (Optional)
 
 ```text
-"I love ML"  → [1, 1, 1, 0]
-"I love NLP" → [1, 1, 0, 1]
+"iphone 15" → "iphone"
 ```
 
-So the ML model sees input like:
-
-```text
-X = (number of documents) × (number of features)
-```
-
-This is also called a **document-term matrix**.
-
-Important:
-- ML models usually need **fixed-size** input vectors
-- different vectorization methods create different types of features
-	- counts (BoW)
-	- weighted counts (TF-IDF)
-	- dense semantic vectors (embeddings)
+depends on task.
 
 ---
 
-### 1) One-Hot Encoding
+#### Remove URLs
 
-One-hot encoding represents each word as a binary vector.
+```text
+https://abc.com
+```
+
+---
+
+#### Remove HTML Tags
+
+```html
+<div> Hello </div>
+```
+
+---
+
+#### Remove Emojis (Optional)
+
+```text
+😂🔥😍
+```
+
+May break vectorization in classical ML.
+
+Modern transformers can use them.
+
+---
+
+#### Stopword Removal
+
+Stopwords:
+
+```text
+is, the, was, in, and
+```
+
+Usually carry less meaning.
+
+Example:
+
+```text
+"This is a book"
+→ ["book"]
+```
+
+---
+
+#### Spelling Correction (Optional)
+
+```text
+"gud" → "good"
+```
+
+---
+
+### Tokenization
+
+Token:
+
+```text
+Smallest unit of text
+```
+
+Examples:
+- word
+- character
+- subword
+
+Tokenization:
+
+```text
+Splitting text into tokens
+```
+
+Example:
+
+```text
+"I love NLP"
+→ ["I", "love", "NLP"]
+```
+
+---
+
+### Important Terms
+
+#### Corpus
+
+Complete collection of text data.
+
+Example:
+
+```text
+All reviews dataset
+```
+
+---
+
+#### Document
+
+Single text sample.
+
+Examples:
+- one sentence
+- one paragraph
+- one review
+
+---
+
+#### Vocabulary (Vocab)
+
+All unique words.
+
+Example:
+
+```text
+[I, love, pizza, atul]
+```
+
+---
+
+### Feature Extraction / Vectorization
+
+ML models work on:
+
+```text
+Numbers
+```
+
+So text must be converted into vectors.
+
+Methods:
+1. One Hot Encoding
+2. Bag of Words
+3. TF-IDF
+4. Word2Vec
+5. BERT / Transformers
+
+---
+
+### Text Representation
+
+Sentence/document converted into:
+
+```text
+Vector = list of numbers
+```
+
+Each number acts like:
+
+```text
+Feature
+```
+
+Example:
+
+Vocabulary:
+
+```text
+[I, love, ML, NLP]
+```
+
+```text
+"I love ML"
+→ [1,1,1,0]
+```
+
+Matrix form:
+
+```text
+X = (documents × features)
+```
+
+called:
+
+```text
+Document-Term Matrix
+```
+
+---
+
+## 1. One Hot Encoding (OHE)
+
+Represents each word as:
+
+```text
+Binary Vector
+```
+
+Only one position is:
+
+```text
+1
+```
+
+others:
+
+```text
+0
+```
+
+---
+
+### Example
+
+Vocabulary:
+
+```text
+[atul, reads, books, richa, novels, library, has, both, and]
+```
+
+Vectors:
+
+```text
+atul   → [1,0,0,0,0,0,0,0,0]
+reads  → [0,1,0,0,0,0,0,0,0]
+books  → [0,0,1,0,0,0,0,0,0]
+```
+
+---
+
+### Dataset Example
+
+Documents:
+
+```text
+D1: "atul reads books"
+D2: "richa reads novels"
+D3: "library has both books and novels"
+```
+
+---
+
+### One Hot Representation
+
+```text
+Vocab:
+[atul, reads, books, richa, novels,
+ library, has, both, and]
+
+D1:
+[1,1,1,0,0,0,0,0,0]
+
+D2:
+[0,1,0,1,1,0,0,0,0]
+
+D3:
+[0,0,1,0,1,1,1,1,1]
+```
+
+---
+
+#### Advantages
+
+- intuitive
+- easy implementation
+
+---
+
+#### Limitations
+
+##### Sparse Representation
+
+Example:
+
+```text
+50k vocab size
+```
+
+Most values become:
+
+```text
+0
+```
+
+Huge memory waste.
+
+---
+
+##### Out of Vocabulary (OOV)
+
+New unseen words ignored.
+
+---
+
+##### Semantic Meaning Not Captured
+
+Example:
+
+```text
+"car" and "automobile"
+```
+
+treated completely unrelated.
+
+---
+
+##### Variable Length Problem
+
+Different sentences:
+
+```text
+Different sizes
+```
+
+ML models usually need:
+
+```text
+Fixed-size vectors
+```
+
+---
+
+## 2. Bag of Words (BoW)
 
 Idea:
-- create a vocabulary of all unique words
-- each word is represented by a vector of length = vocabulary size
-- only **one position is 1**, all others are 0
-
-Example:
 
 ```text
-Vocab: [I, love, ML, NLP]
-
-I   → [1, 0, 0, 0]
-ML  → [0, 0, 1, 0]
-NLP → [0, 0, 0, 1]
+Count frequency of words
 ```
 
-How to represent a full sentence/document:
-- as a sequence of one-hot vectors (token by token), OR
-- by summing/counting them (this becomes Bag of Words)
+Document represented using:
 
-Limitations:
-- very high-dimensional and sparse (too many zeros)
-- does not capture meaning ("ML" and "AI" are unrelated)
-- vocabulary is built during training; if a new word (out-of-vocabulary) appears in testing, it may be ignored → information loss
-- if we keep it as a sequence, sentences can have different lengths → ML models usually need fixed-size input
+```text
+(term, frequency)
+```
 
 ---
 
-### 2) Bag of Words (BoW)
+### Example
 
-Idea:
-- create vocabulary of all words
-- represent each document by word counts
-- similarity can be computed using vector similarity (dot product / cosine similarity)
-
-Simple intuition:
-- two sentences are more similar if they share more common words (with similar counts)
-
-Example:
+Documents:
 
 ```text
 Doc1: "I love ML"
 Doc2: "I love NLP"
-Doc3: "I love love love NLP"
-
-Vocab: [I, love, ML, NLP]
-Doc1: [1, 1, 1, 0]
-Doc2: [1, 1, 0, 1]
-Doc3: [1, 3, 0, 1]
+Doc3: "I love love NLP"
 ```
-Pros:
-- creates fixed size vectors for each sentence(input).
-- simple and fast baseline
 
-Limitation:
-- ignores word order
-- does not capture meaning
-- sparse matrix
-- out of vocabulary issue.
+Vocabulary:
+
+```text
+[I, love, ML, NLP]
+```
+
+Vectors:
+
+```text
+Doc1 → [1,1,1,0]
+Doc2 → [1,1,0,1]
+Doc3 → [1,2,0,1]
+```
 
 ---
 
-### 3) TF-IDF
+### Similarity Intuition
 
-TF-IDF gives higher weight to words that are:
-- frequent in a document
-- but rare across all documents
+More common words:
 
-Formulas:
+```text
+→ higher similarity
+```
 
-Term Frequency (TF):
+Similarity methods:
+- cosine similarity
+- dot product
+
+---
+
+#### Advantages
+
+- easy
+- fixed size vectors
+- works with ML
+- fast baseline
+
+---
+
+#### Limitations
+
+- sparse matrix
+- ignores word order
+- semantic meaning not captured
+- OOV issue
+
+---
+
+## N-Grams
+
+Previously:
+
+```text
+1 word = feature
+```
+
+called:
+
+```text
+Unigram
+```
+
+N-Gram:
+
+```text
+Sequence of N consecutive words
+```
+
+---
+
+### Types
+
+#### Unigram
+
+```text
+["I", "love", "NLP"]
+```
+
+---
+
+#### Bigram
+
+```text
+["I love", "love NLP"]
+```
+
+---
+
+#### Trigram
+
+```text
+["I love NLP"]
+```
+
+---
+
+### Example
+
+Sentence:
+
+```text
+"I am working in TRDDC Pune"
+```
+
+Bigrams:
+
+```text
+(I am)
+(am working)
+(working in)
+(in TRDDC)
+(TRDDC Pune)
+```
+
+---
+
+### Why N-Grams Help?
+
+Example:
+
+```text
+S1: "cricket is very good"
+S2: "cricket is not good"
+```
+
+---
+
+### Unigram Representation
+
+Vocabulary:
+
+```text
+[cricket,is,very,not,good]
+```
+
+Vectors:
+
+```text
+S1 → [1,1,1,0,1]
+S2 → [1,1,0,1,1]
+```
+
+Both look similar.
+
+---
+
+### Bigram Representation
+
+Vocabulary:
+
+```text
+[cricket is,
+ is very,
+ very good,
+ is not,
+ not good]
+```
+
+Vectors:
+
+```text
+S1 → [1,1,1,0,0]
+S2 → [1,0,0,1,1]
+```
+
+Now meanings become different.
+
+---
+
+#### Advantages
+
+- captures local context
+- better semantic meaning
+- handles negation better
+
+---
+
+#### Limitations
+
+- dimensions increase rapidly
+- sparse matrix
+- OOV issue
+
+---
+
+## 3. TF-IDF
+
+Full Form:
+
+```text
+Term Frequency - Inverse Document Frequency
+```
+
+Idea:
+- important words get high weight
+- common words get low weight
+
+---
+
+### Term Frequency (TF)
+
+Measures:
+
+```text
+How frequent word is inside document
+```
+
+Formula:
 
 $$
 TF(t,d)=\frac{count(t\ in\ d)}{total\ terms\ in\ d}
 $$
 
-Inverse Document Frequency (IDF):
+---
+
+### Inverse Document Frequency (IDF)
+
+Measures:
+
+```text
+How rare word is across corpus
+```
+
+Formula:
 
 $$
 IDF(t)=\log\left(\frac{N}{df(t)}\right)
 $$
 
-TF-IDF:
+Where:
+- $begin:math:text$N$end:math:text$ = total documents
+- $begin:math:text$df\(t\)$end:math:text$ = documents containing term
+
+---
+
+### TF-IDF Formula
 
 $$
-TF\text{-}IDF(t,d)=TF(t,d)\times IDF(t)
+TFIDF(t,d)=TF(t,d)\times IDF(t)
 $$
 
-Pros:
-- better than plain word counts because common words get down-weighted
-- often works very well with classic ML models (Logistic Regression, SVM, Naive Bayes)
-- simple, fast, and interpretable (you can inspect important words)
-- works well for large vocabularies because it is sparse
+---
 
-Limitations:
-- still does not understand meaning (synonyms/polysemy are not handled)
-- mostly ignores word order (unless you add n-grams)
-- sparse and high-dimensional → can be memory heavy for huge corpora
-- out-of-vocabulary (new words at test time are ignored)
-- IDF depends on the corpus; on very small datasets it can be noisy
+### Why "Inverse" Document Frequency?
 
-#### N-grams in TF-IDF
+Common words:
 
-So far we assumed each **feature** is a single word (this is called a **unigram**).
+```text
+the, is, and
+```
 
-**N-gram** = a sequence of $n$ consecutive tokens.
+appear everywhere.
 
-- **1-gram (unigram):** `"not"`, `"good"`
-- **2-gram (bigram):** `"not good"`, `"machine learning"`
-- **3-gram (trigram):** `"I do not"`
+So:
+
+```text
+Less useful
+```
+
+Rare words:
+
+```text
+cancer, transformer, bitcoin
+```
+
+carry more information.
+
+Thus:
+
+```text
+Rare words → higher weight
+```
+
+---
+
+#### Advantages
+
+- better than BoW
+- reduces importance of common words
+- widely used in search engines
+- works well with ML models
+
+Used in:
+
+```text
+Google Search / Information Retrieval
+```
+
+---
+
+#### Limitations
+
+- sparse vectors
+- OOV problem
+- high dimensions
+- weak semantic understanding
+
+---
+
+## 4. Word Embeddings
+
+Represent words using:
+
+```text
+Dense Real-Valued Vectors
+```
+
+Instead of:
+
+```text
+Huge sparse vectors
+```
+
+---
+
+### Core Idea
+
+Words used in similar context:
+
+```text
+Have similar vectors
+```
 
 Example:
 
 ```text
-Sentence: "this movie is not good"
-Unigrams : [this, movie, is, not, good]
-Bigrams  : [this movie, movie is, is not, not good]
-```
-
-Why bigrams can beat unigrams (simple example):
-
-```text
-S1: "cricket is not good"
-S2: "cricket is very good"
-
-Unigram vocab  : [cricket, is, not, very, good]
-S1 unigram vec : [1, 1, 1, 0, 1]
-S2 unigram vec : [1, 1, 0, 1, 1]
-
-These vectors share most words, so they look very similar,thus cosine similarity will be high even though the meanings are opposite.
-
-Bigram vocab   : [cricket is, is not, not good, is very, very good]
-S1 bigram vec  : [1, 1, 1, 0, 0]
-S2 bigram vec  : [1, 0, 0, 1, 1]
-
-Now the key phrases "not good" vs "very good" become different features and the vectors will have low similarity as expected.
-```
-
-When we use TF-IDF with n-grams, the **vocabulary** can contain unigrams + bigrams + trigrams, and the document-term matrix becomes larger.
-
-How it helps:
-- captures short phrases / local word-order information
-- handles negation better (e.g., `"not good"` is different from `"good"`)
-- improves classification tasks where phrases matter
-
-Trade-offs:
-- vocabulary size grows fast → more memory and slower training
-- can overfit if you use high $n$ on small datasets
-
-When to use n-grams (practical guidance):
-- Use **unigram TF-IDF** as a strong baseline for many text classification tasks.
-- Add **bigrams** when meaning depends on phrases (sentiment, spam, intent, topic labels).
-- Use **trigrams** only if you have enough data and phrases of length 3 matter.
-
-Also: **Word n-grams vs Character n-grams**
-
-- **Word n-grams** (default): best when tokens are clean and you care about phrases.
-- **Character n-grams**: helpful for noisy text (typos, usernames, hashtags), and for languages with rich morphology.
-
-Common choices:
-- word n-grams: `(1,2)` (unigram + bigram)
-- char n-grams: `(3,5)` (character 3 to 5-grams)
-
----
-
-### 4) Word Embeddings
-
-Word embeddings represent each word as a **dense vector** (a small list of real numbers), usually 50–300 dimensions.
-
-Core idea:
-- instead of one-hot vectors (very large + sparse), we learn a compact vector for each word
-- words used in similar contexts get similar vectors (distributional hypothesis)
-
-You can think of an embedding model as learning an **embedding matrix** $E$:
-
-$$
-E \in \mathbb{R}^{|V|\times d}
-$$
-
-where:
-- $|V|$ = vocabulary size
-- $d$ = embedding dimension
-- row $E[w]$ = vector for word $w$
-
-#### Why embeddings are better than BoW/TF-IDF
-- dense (less memory than huge sparse vectors)
-- captures some meaning/relatedness ("movie" close to "film")
-- can generalize better because similar words have similar vectors
-
-#### Common (static) embedding methods
-
-##### 1) Word2Vec
-
-Two training styles:
-
-- **CBOW (Continuous Bag of Words):** predict the center word using surrounding context words
-- **Skip-gram:** predict surrounding context words using the center word
-
-Simple intuition:
-- if "cricket" often appears near "bat", "match", "runs", then the model adjusts vectors so these words become close in the embedding space.
-
-Note:
-- Word2Vec is often trained with **negative sampling** (train on true word-context pairs and a few random "fake" pairs) to make it fast.
-
-##### 2) GloVe
-
-Idea:
-- uses global word co-occurrence counts (how often word $i$ appears near word $j$)
-- learns vectors so that dot products roughly match co-occurrence patterns
-
-In practice:
-- works well for many general-purpose embeddings
-
-##### 3) FastText
-
-Idea:
-- represents a word using **subword / character n-grams**
-- helpful for rare words and morphologically rich languages
-
-Example intuition:
-- word: "playing" shares subwords with "play", "player", "played" → better handling of unseen/rare words
-
-#### How embeddings are used in a model
-
-For a sentence:
-
-```text
-"I love NLP" → [I, love, NLP] → [vec(I), vec(love), vec(NLP)]
-```
-
-Then we can:
-- average/sum vectors to get a simple sentence vector (baseline), OR
-- feed the sequence into a model (RNN/CNN/Transformer)
-
-Pros:
-- dense + compact representation
-- captures semantic similarity better than one-hot/BoW
-- useful when you don’t have huge labeled data (pretrained embeddings help)
-
-Limitations:
-- **static**: each word has only one vector ("bank" has one vector for all meanings)
-- still not true "understanding"; depends on training data
-- pretrained embeddings may not capture domain-specific meanings (medical/legal)
-
-Example idea:
-
-```text
-vec("king") - vec("man") + vec("woman") ≈ vec("queen")
+king - man + woman ≈ queen
 ```
 
 ---
 
-### 5) Contextual Embeddings
+### Embedding Matrix
 
-Contextual embeddings solve a key weakness of static embeddings:
+$$
+E \in \mathbb{R}^{|V| \times d}
+$$
 
-- **static embedding:** one word → one vector (same vector everywhere)
-- **contextual embedding:** one word → different vector depending on the sentence
+Where:
+- $begin:math:text$\|V\|$end:math:text$ = vocabulary size
+- $begin:math:text$d$end:math:text$ = embedding dimension
+
+---
+
+### Why Better Than BoW?
+
+- dense representation
+- captures meaning
+- semantic similarity learned
+- smaller vectors
+
+---
+
+### Word2Vec
+
+Learns embeddings using context.
+
+---
+
+#### CBOW
+
+Predict center word using surrounding words.
+
+---
+
+#### Skip-Gram
+
+Predict surrounding words using center word.
+
+---
+
+### GloVe
+
+Uses:
+
+```text
+Global Word Co-occurrence
+```
+
+to learn embeddings.
+
+---
+
+### FastText
+
+Uses:
+
+```text
+Character/Subword n-grams
+```
+
+Better for:
+- rare words
+- unseen words
+
+---
+
+#### Limitations
+
+- static embeddings
+- one word → one vector
 
 Example:
 
 ```text
-"I sat on the bank of the river"   → bank = river-side meaning
-"I deposited money in the bank"    → bank = finance meaning
+bank
 ```
 
-In contextual models, the embedding for "bank" is different in these two sentences.
-
-#### How contextual embeddings are produced
-
-Most modern contextual embeddings come from **Transformer** models.
-
-Pipeline idea:
-1. text is tokenized (often into subwords)
-2. model processes the whole sequence with attention
-3. output is a vector for each token that already includes context
-
-So for:
-
-```text
-"I love NLP" → vectors: [h1, h2, h3]
-```
-
-each $h_i$ depends on the entire sentence.
-
-#### Common contextual models
-
-- **BERT / RoBERTa (encoder models):**
-	- trained mainly with **Masked Language Modeling (MLM)**
-	- great for understanding tasks (classification, NER, QA)
-	- produces strong representations for each token
-
-- **GPT (decoder models):**
-	- trained with **next-token prediction**
-	- great for text generation
-	- also provides contextual token representations internally
-
-#### How contextual embeddings are used
-
-Two common ways:
-
-1) **Token-level tasks** (need a label per token)
-- NER, POS tagging
-- use the token vectors directly
-
-2) **Sentence/document-level tasks**
-- classification, retrieval
-- you can use a special pooled vector (e.g., [CLS] in BERT) or mean-pool all token vectors
-
-Pros:
-- handles polysemy (same word, different meaning)
-- captures richer information than TF-IDF/static embeddings
-- strong performance across many NLP tasks with fine-tuning
-
-Limitations:
-- heavier compute + memory (training and inference)
-- harder to interpret than TF-IDF
-- needs careful fine-tuning to avoid overfitting on small datasets
+same vector for:
+- river bank
+- finance bank
 
 ---
 
-### Common NLP Tasks
+## 5. Contextual Embeddings
 
-#### 1) Text Classification
+Meaning depends on:
+
+```text
+Context
+```
+
+Example:
+
+```text
+bank of river
+bank account
+```
+
+Different embeddings generated.
+
+---
+
+### Based On
+
+```text
+Transformers
+```
+
+Models:
+- BERT
+- GPT
+- RoBERTa
+
+---
+
+#### Advantages
+
+- understands context
+- handles polysemy
+- state-of-the-art performance
+
+---
+
+#### Limitations
+
+- computationally expensive
+- large memory usage
+- slower training
+
+---
+
+## Common NLP Tasks
+
+### Text Classification
 
 Examples:
-- spam vs not spam
-- positive vs negative sentiment
+- spam detection
+- sentiment analysis
 
-#### 2) Named Entity Recognition (NER)
+---
+
+### Named Entity Recognition (NER)
 
 Find entities:
-- Person, Location, Organization
+- person
+- location
+- organization
 
 Example:
 
 ```text
 "Elon Musk lives in USA"
-Person: Elon Musk
-Location: USA
+
+Person → Elon Musk
+Location → USA
 ```
-
-#### 3) Machine Translation
-
-English → French, etc.
-
-#### 4) Text Summarization
-
-- extractive
-- abstractive
 
 ---
 
-### Common Models Used in NLP
+### Machine Translation
 
-Traditional ML:
-- Naive Bayes (good baseline for text)
+Example:
+
+```text
+English → French
+```
+
+---
+
+### Text Summarization
+
+#### Extractive
+
+Pick important sentences.
+
+#### Abstractive
+
+Generate new summary.
+
+---
+
+## Common NLP Models
+
+### Traditional ML
+
+- Naive Bayes
 - Logistic Regression
 - SVM
 
-Deep Learning:
-- RNN / LSTM / GRU
-- CNN for text
-- Transformers (BERT, GPT)
+---
+
+### Deep Learning
+
+- RNN
+- LSTM
+- GRU
+- CNN
+- Transformers
 
 ---
 
-### Evaluation Metrics
+## Evaluation Metrics
 
-For classification:
+Classification Metrics:
 - Accuracy
-- Precision, Recall
-- F1-score
+- Precision
+- Recall
+- F1 Score
 
-Confusion matrix is often used.
+Confusion Matrix commonly used.
 
 ---
 
-### Important Notes
+## Important Interview Points
 
-- Text data is sparse in BoW/TF-IDF
-- Feature scaling is not used the same way for text vectors
-- More data usually improves NLP models
-- Preprocessing depends on the task (don’t remove useful words)
-
+- NLP converts text → numbers
+- BoW/TF-IDF create sparse vectors
+- embeddings create dense vectors
+- TF-IDF used heavily in search systems
+- transformers dominate modern NLP
+- preprocessing depends on task
+- stopword removal not always useful
+- deep learning captures context better
