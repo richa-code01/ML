@@ -3,7 +3,7 @@
 When we say “Gradient Descent”, the core update is the same:
 
 $$
-	heta \leftarrow \theta - \alpha\,\nabla_{\theta} L(\theta)
+	\theta \leftarrow \theta - \alpha\,\nabla_{\theta} L(\theta)
 $$
 
 But **how we estimate the gradient** depends on how many training examples we use per update.
