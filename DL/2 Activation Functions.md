@@ -62,6 +62,14 @@ $$
 softmax(z_i)=\frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}
 $$
 
+Probability note:
+- softmax converts logits into values in $[0,1]$ that sum to 1, so it can be interpreted as the **probability of each class** (for **single-label** multi-class classification)
+- for **multi-label** classification (multiple classes can be true), use **sigmoid** independently for each class instead of softmax
+
+Output layer note:
+- for $K$-class (single-label) classification, the output layer usually has **$K$ neurons** (one logit per class), followed by softmax
+- binary classification is commonly done with **1 output neuron + sigmoid** (or sometimes 2 neurons + softmax)
+
 Where to use:
 - **output layer** for **multi-class, single-label** classification (choose 1 class out of $K$)
 - typically paired with **cross-entropy loss**
